@@ -678,7 +678,7 @@
           <div class="placeList" id="placeList"></div>
         </div>
 
-        <div class="hint">※ 預設使用 Leaflet + OpenStreetMap；若 CDN 被擋會自動 fallback 成假 pin 地圖，確保 demo 一定可用。</div>
+        <div class="hint">※ 預設使用 Leaflet + OpenStreetMap；若 CDN/Tile 被擋會自動 fallback 成假 pin 地圖，確保 demo 一定可用。</div>
         <div class="debug" id="debug"></div>
       </div>
     </section>
@@ -899,6 +899,7 @@
     let map = null;
     let markers = [];
     const markerById = new Map();
+    let tileErrored = false;
 
     function markerIcon(score){
       const color = score >= 85 ? 'rgba(53,208,139,.95)' : 'rgba(248,211,75,.95)';
@@ -926,7 +927,8 @@
     }
 
     function highlightRow(id){
-      const row = listBox.querySelector(\`.row[data-id="\${id}"]\`);
+      // ✅ 修正：這裡原本有 \` 造成整段 JS 掛掉
+      const row = listBox.querySelector(`.row[data-id="${id}"]`);
       if(!row) return;
       row.scrollIntoView({behavior:'smooth', block:'nearest'});
       row.style.borderColor = 'rgba(53,208,139,.45)';
@@ -1055,6 +1057,19 @@
       });
     }
 
+    function switchToFallback(reason){
+      debug("Switch to fallback: " + reason);
+      map = null;
+      renderFallback();
+      [searchInput, typeFilter, scoreFilter].forEach(el => el.addEventListener('input', renderFallback));
+      resetMap.addEventListener('click', () => {
+        searchInput.value = '';
+        typeFilter.value = 'all';
+        scoreFilter.value = 'all';
+        renderFallback();
+      });
+    }
+
     // =========================
     // ✅ MAP init
     // =========================
@@ -1063,9 +1078,16 @@
       if(leafletOK){
         try{
           map = L.map('mapBox', { zoomControl:true }).setView([23.75, 121.0], 7);
-          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+          const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
-          }).addTo(map);
+          });
+
+          tiles.on('tileerror', () => {
+            tileErrored = true;
+          });
+
+          tiles.addTo(map);
           renderLeaflet();
 
           [searchInput, typeFilter, scoreFilter].forEach(el => el.addEventListener('input', renderLeaflet));
@@ -1076,26 +1098,36 @@
             renderLeaflet();
           });
 
-          // 修正：GitHub Pages 有時候 hash 直接跳 #map，地圖在初始時還沒計算尺寸
-          setTimeout(() => { map.invalidateSize(); }, 120);
-          window.addEventListener('resize', () => map.invalidateSize());
+          // ✅ 保險：尺寸重算（hash/載入/resize）
+          const safeInvalidate = () => { try{ map && map.invalidateSize(); }catch(e){} };
+          setTimeout(safeInvalidate, 120);
+          setTimeout(safeInvalidate, 600);
+          window.addEventListener('resize', safeInvalidate);
+
+          // ✅ hash 跳轉到 #map 時也重算
+          window.addEventListener('hashchange', () => {
+            if(location.hash === '#map') setTimeout(safeInvalidate, 80);
+          });
+
+          // ✅ 若 tiles 被擋，短時間內自動切 fallback
+          setTimeout(() => {
+            if(tileErrored){
+              try{ map.remove(); }catch(e){}
+              switchToFallback("OSM tile blocked");
+            }
+          }, 1200);
+
           return;
         }catch(e){
           debug("Leaflet init fail => fallback");
           debug(String(e));
+          try{ map && map.remove(); }catch(_){}
           map = null;
         }
       }
 
       // fallback
-      renderFallback();
-      [searchInput, typeFilter, scoreFilter].forEach(el => el.addEventListener('input', renderFallback));
-      resetMap.addEventListener('click', () => {
-        searchInput.value = '';
-        typeFilter.value = 'all';
-        scoreFilter.value = 'all';
-        renderFallback();
-      });
+      switchToFallback("Leaflet not available");
     }
 
     // =========================
@@ -1261,6 +1293,10 @@
     // =========================
     function init(){
       initMap();
+      // 若一開始就停在 #map（直接開啟 hash），再補一次 invalidate
+      if(location.hash === '#map' && map){
+        setTimeout(() => { try{ map.invalidateSize(); }catch(e){} }, 120);
+      }
     }
 
     if(document.readyState === 'loading'){
