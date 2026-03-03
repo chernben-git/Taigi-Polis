@@ -16,11 +16,15 @@
   <style>
     :root{
       --bg:#071a16;
+      --bg2:#061412;
       --text:rgba(255,255,255,.92);
       --muted:rgba(255,255,255,.72);
 
       --line:rgba(255,255,255,.14);
       --line2:rgba(165,255,220,.18);
+
+      --panel:rgba(255,255,255,.05);
+      --panel2:rgba(255,255,255,.08);
 
       --accent:#35d08b;
       --accent2:#1fb7a4;
@@ -28,6 +32,7 @@
 
       --good:#6ee7b7;
       --warn:#f8d34b;
+      --bad:#fca5a5;
 
       --shadow: 0 22px 70px rgba(0,0,0,.55);
       --shadow2: 0 12px 34px rgba(0,0,0,.42);
@@ -93,6 +98,7 @@
     .content{position:relative}
     h1{margin:0 0 10px; font-size:38px; line-height:1.12}
     .subtitle{color:var(--muted); max-width:76ch}
+
     .tagline{
       margin-top:14px;
       font-weight:900;
@@ -114,6 +120,7 @@
       transition: transform .15s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
       cursor:pointer;
       user-select:none;
+      opacity:1;
     }
     .btn:hover{
       transform: translateY(-2px);
@@ -140,6 +147,7 @@
       background: linear-gradient(180deg, rgba(255,224,92,.98), rgba(248,211,75,.86));
       border-color: rgba(255,224,92,.65);
     }
+
     .btn.back{
       border-color: rgba(31,183,164,.45);
       background: linear-gradient(180deg, rgba(31,183,164,.14), rgba(0,0,0,.12));
@@ -151,6 +159,7 @@
     h2{margin:6px 0 10px; font-size:22px}
     .grid{display:grid; gap:14px}
     @media(min-width:860px){ .cols3{grid-template-columns:repeat(3,1fr)} }
+    @media(min-width:860px){ .cols2{grid-template-columns:repeat(2,1fr)} }
 
     .card{
       border:1px solid rgba(165,255,220,.14);
@@ -162,22 +171,142 @@
     }
     .muted{color:var(--muted)}
     .hr{height:1px; background:rgba(165,255,220,.14); margin:16px 0}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px;
+      border:1px solid rgba(165,255,220,.16);
+      border-radius:999px;
+      background:rgba(0,0,0,.16);
+      font-size:12px;
+      margin-right:8px; margin-top:8px;
+      color:rgba(255,255,255,.88);
+    }
 
-    /* MAP layout */
+    /* QUIZ */
+    .quizQ{margin:10px 0 0; padding:12px; border:1px solid rgba(165,255,220,.14); border-radius:14px; background:rgba(0,0,0,.16);}
+    .quizQ h3{margin:0 0 10px; font-size:15px}
+    .opts{display:grid; gap:10px}
+    .opt{
+      display:flex; gap:10px; align-items:flex-start;
+      padding:10px 10px;
+      border:1px solid rgba(165,255,220,.14);
+      border-radius:14px;
+      background:rgba(255,255,255,.04);
+      cursor:pointer;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+    }
+    .opt:hover{
+      transform: translateY(-1px);
+      border-color: rgba(53,208,139,.30);
+      background: rgba(53,208,139,.06);
+    }
+    .opt input{margin-top:3px}
+    .opt .t{font-weight:900}
+    .opt .d{color:var(--muted); font-size:13px; margin-top:2px}
+    .quizActions{display:flex; gap:12px; flex-wrap:wrap; margin-top:12px}
+
+    /* MODAL */
+    .modal{
+      position:fixed; inset:0;
+      display:none;
+      align-items:center; justify-content:center;
+      background:rgba(0,0,0,.62);
+      z-index:80;
+      padding:18px;
+    }
+    .modal.show{display:flex}
+    .modalBox{
+      width:min(720px, 100%);
+      border:1px solid rgba(165,255,220,.18);
+      border-radius:22px;
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.14));
+      box-shadow: 0 34px 110px rgba(0,0,0,.60);
+      overflow:hidden;
+    }
+    .modalHead{
+      padding:16px 16px 10px;
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      border-bottom:1px solid rgba(165,255,220,.14);
+    }
+    .close{
+      border:1px solid rgba(165,255,220,.18);
+      background:rgba(0,0,0,.18);
+      color:var(--text);
+      border-radius:999px;
+      padding:8px 10px;
+      font-weight:900;
+      cursor:pointer
+    }
+    .modalBody{padding:16px}
+
+    .resultCard{
+      border:1px solid rgba(165,255,220,.16);
+      border-radius:18px;
+      padding:16px;
+      background:
+        radial-gradient(640px 260px at 14% 22%, rgba(53,208,139,.18), transparent 60%),
+        radial-gradient(560px 260px at 86% 22%, rgba(31,183,164,.14), transparent 60%),
+        rgba(0,0,0,.14);
+    }
+    .resultTop{display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between}
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(165,255,220,.18);
+      background:rgba(0,0,0,.18);
+      font-weight:900;
+    }
+    .resultTitle{font-size:20px; margin:10px 0 6px; font-weight:900}
+    .resultText{color:var(--muted); margin:0}
+    .taiyuLine{
+      margin-top:10px;
+      padding:12px;
+      border-radius:14px;
+      border:1px dashed rgba(165,255,220,.22);
+      background:rgba(0,0,0,.22);
+    }
+    .taiyuLine .label{font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.62)}
+    .taiyuLine .line{font-weight:900; font-size:16px; margin-top:6px}
+    .taiyuLine .roman{color:rgba(255,255,255,.74); font-size:13px; margin-top:4px}
+    .shareBox{
+      margin-top:12px;
+      border:1px solid rgba(165,255,220,.14);
+      border-radius:14px;
+      padding:12px;
+      background:rgba(0,0,0,.22);
+    }
+    textarea{
+      width:100%;
+      min-height:120px;
+      resize:vertical;
+      border-radius:12px;
+      border:1px solid rgba(165,255,220,.14);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:10px;
+      outline:none;
+    }
+    .hint{font-size:12px; color:rgba(255,255,255,.62); margin-top:8px}
+
+    /* MAP */
     .mapShell{display:grid; gap:14px;}
     @media(min-width:860px){ .mapShell{grid-template-columns: 1.1fr .9fr;} }
 
     .map{
       border:1px solid rgba(165,255,220,.14);
       border-radius:18px;
-      overflow:hidden;
       height:420px;
       position:relative;
+      overflow:hidden;
       box-shadow:var(--shadow2);
-      background: rgba(0,0,0,.14);
+      background:
+        radial-gradient(920px 440px at 18% 18%, rgba(53,208,139,.10), transparent 60%),
+        radial-gradient(760px 380px at 82% 26%, rgba(31,183,164,.08), transparent 60%),
+        rgba(0,0,0,.14);
     }
 
-    /* fallback demo grid */
+    /* fallback grid */
     .mapGrid{
       position:absolute; inset:0;
       background-image:
@@ -186,7 +315,7 @@
       background-size: 42px 42px;
       opacity:.30;
       pointer-events:none;
-      display:none; /* only show in fallback */
+      display:none;
     }
     .pin{
       position:absolute;
@@ -224,10 +353,9 @@
       padding:10px 12px;
       outline:none;
     }
-    input[type="search"]{min-width: 240px}
+    input[type="search"]{min-width: 220px}
     option{background:#071a16}
 
-    /* ✅ 這裡修正：placeList 必須有 class，row 樣式才會套到 */
     .placeList .row{
       border:1px solid rgba(165,255,220,.12);
       border-radius:14px;
@@ -254,7 +382,112 @@
     .score{font-weight:900}
     .score.good{color: rgba(110,231,183,.95)}
     .score.mid{color: rgba(248,211,75,.95)}
-    .hint{font-size:12px; color:rgba(255,255,255,.62); margin-top:8px}
+
+    /* TASKS */
+    .taskBox{
+      border:1px solid rgba(165,255,220,.14);
+      border-radius:14px;
+      padding:12px;
+      background:rgba(0,0,0,.22);
+      margin-top:12px;
+    }
+    .taskRow{
+      display:flex; gap:10px; align-items:flex-start;
+      padding:10px;
+      border:1px solid rgba(165,255,220,.12);
+      border-radius:14px;
+      background:rgba(255,255,255,.03);
+      margin-top:10px;
+    }
+    .cb{
+      width:18px; height:18px; border-radius:6px;
+      border:1px solid rgba(165,255,220,.20);
+      background:rgba(255,255,255,.04);
+      display:flex; align-items:center; justify-content:center;
+      flex:0 0 auto;
+      margin-top:2px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .cb.done{
+      border-color: rgba(53,208,139,.60);
+      background: rgba(53,208,139,.16);
+      box-shadow: 0 0 18px rgba(53,208,139,.14);
+    }
+    .cb svg{opacity:0}
+    .cb.done svg{opacity:1}
+    .taskText{flex:1}
+    .taskText .t{font-weight:900}
+    .taskText .d{color:var(--muted); font-size:13px; margin-top:2px}
+    .progressRow{
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      margin-top:12px;
+      color:rgba(255,255,255,.84);
+      font-size:13px;
+    }
+    .bar{
+      height:10px;
+      border-radius:999px;
+      border:1px solid rgba(165,255,220,.14);
+      background:rgba(255,255,255,.04);
+      overflow:hidden;
+      margin-top:8px;
+    }
+    .bar > div{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, rgba(53,208,139,.78), rgba(31,183,164,.70), rgba(248,211,75,.58));
+      transition: width .25s ease;
+    }
+
+    /* MISSION BAR */
+    .missionBar{
+      position:fixed;
+      left:50%; bottom:12px;
+      transform: translateX(-50%);
+      width: min(var(--max), calc(100% - 24px));
+      border:1px solid rgba(165,255,220,.18);
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(0,0,0,.18));
+      box-shadow: 0 20px 64px rgba(0,0,0,.62);
+      backdrop-filter: blur(14px);
+      z-index:60;
+      overflow:hidden;
+    }
+    .missionGlow{
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(520px 180px at 14% 30%, rgba(53,208,139,.22), transparent 60%),
+        radial-gradient(520px 180px at 86% 30%, rgba(31,183,164,.16), transparent 60%),
+        radial-gradient(720px 220px at 50% 120%, rgba(248,211,75,.10), transparent 65%);
+      filter: blur(10px);
+      opacity:.95;
+      pointer-events:none;
+    }
+    .missionInner{
+      position:relative;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      padding:12px 12px;
+      flex-wrap:wrap;
+    }
+    .missionLeft{display:flex; gap:12px; align-items:center; flex-wrap:wrap}
+    .missionTitle{font-weight:900}
+    .missionMini{color:var(--muted); font-size:13px}
+    .miniBtns{display:flex; gap:10px; flex-wrap:wrap}
+    .mini{padding:9px 12px; font-size:13px}
+    .toggle{
+      border:1px solid rgba(165,255,220,.16);
+      background:rgba(0,0,0,.22);
+      padding:9px 10px;
+      border-radius:999px;
+      font-weight:900;
+      cursor:pointer;
+      color:var(--text);
+    }
+    .collapsed .missionMini, .collapsed .miniBtns{display:none}
 
     /* Leaflet dark-ish */
     .leaflet-container{background:#071a16}
@@ -286,7 +519,7 @@
       border:1px solid rgba(165,255,220,.14);
     }
 
-    /* Debug bar */
+    /* Debug */
     .debug{
       margin-top:12px;
       border:1px dashed rgba(165,255,220,.22);
@@ -296,6 +529,7 @@
       color: rgba(255,255,255,.78);
       font-size:12px;
       white-space: pre-wrap;
+      display:none; /* production: hide */
     }
   </style>
 </head>
@@ -304,6 +538,7 @@
   <div class="wrap">
     <div class="nav">
       <div class="brand"><span class="dot"></span> 台語傳播循環</div>
+
       <div class="links">
         <a href="#quiz">2分鐘測驗</a>
         <a href="#map">友善環境地圖</a>
@@ -312,6 +547,7 @@
       </div>
     </div>
 
+    <!-- HERO -->
     <header class="hero">
       <div class="glow"></div>
       <div class="content">
@@ -328,17 +564,85 @@
           <a class="btn good" href="#join">我想立刻加入</a>
           <a class="btn back" href="index.html">回到台語社團</a>
         </div>
+
+        <div>
+          <span class="pill">台語＝文化能量</span>
+          <span class="pill">社團＝治理骨架</span>
+          <span class="pill">友善環境＝語言場域</span>
+        </div>
       </div>
     </header>
 
-    <!-- QUIZ（保留你的測驗，這裡略過內容：你原本那段可直接貼回來） -->
+    <!-- QUIZ -->
     <section id="quiz">
       <div class="kicker">2-Minute Quiz</div>
       <h2>我是哪一種「會傳播台語的台灣人」？</h2>
+
       <div class="card">
-        <p class="muted">（測驗區塊保留你原本的即可，下面 map 修正才是重點）</p>
-        <div class="hr"></div>
-        <p class="muted">你要完整測驗版我也能再幫你把原本整段補回來；這一版先讓地圖與清單「一定可 demo」。</p>
+        <p class="muted">
+          這個測驗不是在評分你「會不會台語」，而是找出你最適合的參與方式。
+          做完會產生一張結果卡（含一句台語宣言），直接貼到 LINE 群組就能帶人加入。
+        </p>
+
+        <div class="quizQ">
+          <h3>Q1｜你最願意做哪一種事，讓台語回到日常？</h3>
+          <div class="opts">
+            <label class="opt">
+              <input type="radio" name="q1" value="spark" />
+              <div><div class="t">我願意先「說一句」</div><div class="d">每天一句情境台語，先把火種點起來。</div></div>
+            </label>
+            <label class="opt">
+              <input type="radio" name="q1" value="guide" />
+              <div><div class="t">我願意「帶一個新人」</div><div class="d">陪人練習、一起打卡，讓傳承變得有路徑。</div></div>
+            </label>
+            <label class="opt">
+              <input type="radio" name="q1" value="builder" />
+              <div><div class="t">我願意「點亮一個場域」</div><div class="d">推薦店家/教會/市場，讓台語有地方可以被使用。</div></div>
+            </label>
+          </div>
+        </div>
+
+        <div class="quizQ">
+          <h3>Q2｜你比較像哪一種性格？</h3>
+          <div class="opts">
+            <label class="opt">
+              <input type="radio" name="q2" value="story" />
+              <div><div class="t">我擅長分享故事、做內容</div><div class="d">貼文、短影音、音檔、圖片，我願意傳出去。</div></div>
+            </label>
+            <label class="opt">
+              <input type="radio" name="q2" value="organize" />
+              <div><div class="t">我擅長組織、做任務、做管理</div><div class="d">把人聚起來、把事情跑起來。</div></div>
+            </label>
+            <label class="opt">
+              <input type="radio" name="q2" value="connect" />
+              <div><div class="t">我擅長連結資源與場域</div><div class="d">把店家/社區/教會串起來，讓台語回到生活。</div></div>
+            </label>
+          </div>
+        </div>
+
+        <div class="quizQ">
+          <h3>Q3｜如果只能選一個「本週任務」，你最想做？</h3>
+          <div class="opts">
+            <label class="opt">
+              <input type="radio" name="q3" value="share" />
+              <div><div class="t">分享一張台語圖卡到 LINE 群組</div><div class="d">讓更多人看到，直接引發加入。</div></div>
+            </label>
+            <label class="opt">
+              <input type="radio" name="q3" value="buddy" />
+              <div><div class="t">找一個朋友一起打卡 3 天</div><div class="d">把「傳播」變成兩個人的同行。</div></div>
+            </label>
+            <label class="opt">
+              <input type="radio" name="q3" value="place" />
+              <div><div class="t">推薦一個你覺得可以說台語的場域</div><div class="d">點亮一個地方，就會帶出更多使用。</div></div>
+            </label>
+          </div>
+        </div>
+
+        <div class="quizActions">
+          <button class="btn primary" id="calcBtn">產生我的結果卡</button>
+          <a class="btn" href="#join">我不測驗也想加入</a>
+          <a class="btn back" href="index.html">回到台語社團</a>
+        </div>
       </div>
     </section>
 
@@ -368,21 +672,18 @@
         <div class="hr"></div>
 
         <div class="mapShell">
-          <!-- ✅ 真地圖容器 -->
           <div class="map" id="mapBox">
             <div class="mapGrid" id="mapGrid"></div>
           </div>
-
-          <!-- ✅ 修正：加上 class="placeList" -->
           <div class="placeList" id="placeList"></div>
         </div>
 
-        <div class="hint">※ 這是展示用假資料：預設用 Leaflet+OSM 真地圖；若 CDN 被擋，會自動 fallback 成「假 pin 地圖」。</div>
-        <div class="debug" id="debug">Debug: init...</div>
+        <div class="hint">※ 預設使用 Leaflet + OpenStreetMap；若 CDN 被擋會自動 fallback 成假 pin 地圖，確保 demo 一定可用。</div>
+        <div class="debug" id="debug"></div>
       </div>
     </section>
 
-    <!-- JOIN（保留你的原本 join 區塊，這裡略） -->
+    <!-- JOIN -->
     <section id="join">
       <div class="kicker">Join</div>
       <h2>加入台語傳播：三種方式</h2>
@@ -403,14 +704,152 @@
           <a class="btn good" href="JOIN_FORM_URL" target="_blank" rel="noopener">我要帶新</a>
         </div>
       </div>
+
+      <div class="card" style="margin-top:14px">
+        <h3>本週台語傳播任務（可打勾 Demo）</h3>
+        <p class="muted">這裡是「爽感模組」：先做前端假打勾也有效，讓人覺得自己已經在參與。</p>
+
+        <div class="taskBox" id="taskBox">
+          <div class="taskRow" data-task="A">
+            <div class="cb" role="checkbox" aria-checked="false" tabindex="0">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M20 6L9 17l-5-5" stroke="rgba(255,255,255,.92)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="taskText">
+              <div class="t">任務A：分享一張台語圖卡到 LINE 群組</div>
+              <div class="d">貼到家族群／教會群／同事群，最容易引爆擴散。</div>
+            </div>
+          </div>
+
+          <div class="taskRow" data-task="B">
+            <div class="cb" role="checkbox" aria-checked="false" tabindex="0">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M20 6L9 17l-5-5" stroke="rgba(255,255,255,.92)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="taskText">
+              <div class="t">任務B：找 1 位朋友一起打卡 3 天</div>
+              <div class="d">把傳播變同行：你帶一人，循環就倍增。</div>
+            </div>
+          </div>
+
+          <div class="taskRow" data-task="C">
+            <div class="cb" role="checkbox" aria-checked="false" tabindex="0">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M20 6L9 17l-5-5" stroke="rgba(255,255,255,.92)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="taskText">
+              <div class="t">任務C：推薦 1 個友善場域（店家/教會/市場）</div>
+              <div class="d">點亮一個地方，台語就有地方回來。</div>
+            </div>
+          </div>
+
+          <div class="progressRow">
+            <div><b>完成度：</b><span id="progText">0/3</span></div>
+            <div class="muted" id="progHint">先隨便打勾也可以（Demo）</div>
+          </div>
+          <div class="bar"><div id="progBar"></div></div>
+
+          <div class="quizActions" style="margin-top:12px">
+            <button class="btn" id="resetTasks">清除打勾</button>
+            <a class="btn warn" href="LINE_URL" target="_blank" rel="noopener">把任務貼到 LINE 群組</a>
+            <a class="btn back" href="index.html">回到台語社團</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:14px">
+        <h3>一句話口號（可直接貼出去）</h3>
+        <p class="muted">「咱用咱的母語、來疼祖先放乎咱的土地——台灣——做一個會傳播台語的台灣人。」</p>
+        <div class="quizActions" style="margin-top:10px">
+          <a class="btn warn" href="LINE_URL" target="_blank" rel="noopener">點我分享到 LINE</a>
+          <a class="btn back" href="index.html">回到台語社團</a>
+        </div>
+      </div>
     </section>
+  </div>
+
+  <!-- 結果卡 Modal -->
+  <div class="modal" id="modal">
+    <div class="modalBox">
+      <div class="modalHead">
+        <div style="font-weight:900">你的結果卡（可直接分享）</div>
+        <button class="close" id="closeModal">關閉</button>
+      </div>
+      <div class="modalBody">
+        <div class="resultCard">
+          <div class="resultTop">
+            <div class="badge" id="badge">台灣人類型｜—</div>
+            <div class="muted" id="resultMeta">建議任務：—</div>
+          </div>
+          <div class="resultTitle" id="resultTitle">—</div>
+          <p class="resultText" id="resultText">—</p>
+
+          <div class="taiyuLine">
+            <div class="label">Taiwanese Line (Demo)</div>
+            <div class="line" id="taiyuLine">—</div>
+            <div class="roman" id="taiyuRoman">—</div>
+          </div>
+
+          <div class="shareBox">
+            <div style="font-weight:900; margin-bottom:8px">分享文案（複製貼到 LINE 群組）</div>
+            <textarea id="shareText" readonly></textarea>
+            <div class="quizActions" style="margin-top:10px">
+              <button class="btn primary" id="copyBtn">一鍵複製</button>
+              <a class="btn good" href="#join" id="joinFromModal">我想立刻加入</a>
+              <a class="btn back" href="index.html">回到台語社團</a>
+            </div>
+            <div class="hint">提示：貼到「家族群／教會群／同事群」最容易引爆擴散。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 本週台語傳播任務：浮動條 -->
+  <div class="missionBar" id="missionBar">
+    <div class="missionGlow"></div>
+    <div class="missionInner">
+      <div class="missionLeft">
+        <div class="missionTitle">本週台語傳播任務（Demo）</div>
+        <div class="missionMini" id="missionText">
+          任務A：分享一張台語圖卡　｜　任務B：找1位朋友打卡3天　｜　任務C：推薦1個友善場域
+        </div>
+      </div>
+      <div class="miniBtns">
+        <a class="btn mini primary" href="#quiz">先做測驗</a>
+        <a class="btn mini" href="#map">看地圖</a>
+        <a class="btn mini good" href="#join">立刻加入</a>
+        <a class="btn mini back" href="index.html">回台語社團</a>
+      </div>
+      <button class="toggle" id="toggleBar">收合</button>
+    </div>
   </div>
 
   <!-- ✅ Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
-    // ===== Demo 資料（用真經緯度，Leaflet 才穩）=====
+    // =========================
+    // ✅ 可替換的連結（你改這 3 個就好）
+    // =========================
+    const CONFIG = {
+      JOIN_FORM_URL: "JOIN_FORM_URL",
+      PLACE_FORM_URL: "PLACE_FORM_URL",
+      LINE_URL: "LINE_URL"
+    };
+
+    // 替換頁面上的 placeholder href（避免忘記改）
+    function patchLinks(){
+      document.querySelectorAll('a[href="JOIN_FORM_URL"]').forEach(a => a.href = CONFIG.JOIN_FORM_URL);
+      document.querySelectorAll('a[href="PLACE_FORM_URL"]').forEach(a => a.href = CONFIG.PLACE_FORM_URL);
+      document.querySelectorAll('a[href="LINE_URL"]').forEach(a => a.href = CONFIG.LINE_URL);
+    }
+    patchLinks();
+
+    // ===== 假資料：友善環境（真經緯度）=====
     const demoPlaces = [
       { id:1, name:"阿霞咖啡", type:"cafe",   area:"台中", lat:24.1477, lng:120.6736, score:92, note:"店員願意用台語點餐，牆上有台語小卡" },
       { id:2, name:"東門市場口", type:"market", area:"台中", lat:24.1380, lng:120.6853, score:78, note:"可用台語買菜，攤商親切" },
@@ -430,8 +869,10 @@
     const resetMap = document.getElementById('resetMap');
     const debugEl = document.getElementById('debug');
 
-    function logDebug(msg){
-      debugEl.textContent = (debugEl.textContent ? debugEl.textContent + "\n" : "") + msg;
+    function debug(msg){
+      if(!debugEl) return;
+      debugEl.style.display = 'none'; // production: hide
+      debugEl.textContent += msg + "\n";
     }
 
     function scoreClass(score){
@@ -439,7 +880,6 @@
       return {cls:'mid', label:'可成長'};
     }
 
-    // ===== 篩選 =====
     function getFiltered(){
       const q = (searchInput.value || '').trim().toLowerCase();
       const t = typeFilter.value;
@@ -453,7 +893,9 @@
       });
     }
 
-    // ===== Leaflet（主方案）=====
+    // =========================
+    // ✅ Leaflet（主方案）
+    // =========================
     let map = null;
     let markers = [];
     const markerById = new Map();
@@ -477,27 +919,31 @@
     }
 
     function clearLeafletMarkers(){
+      if(!map) return;
       markers.forEach(m => map.removeLayer(m));
       markers = [];
       markerById.clear();
     }
 
+    function highlightRow(id){
+      const row = listBox.querySelector(\`.row[data-id="\${id}"]\`);
+      if(!row) return;
+      row.scrollIntoView({behavior:'smooth', block:'nearest'});
+      row.style.borderColor = 'rgba(53,208,139,.45)';
+      row.style.background = 'rgba(53,208,139,.08)';
+      setTimeout(() => {
+        row.style.borderColor = 'rgba(165,255,220,.12)';
+        row.style.background = 'rgba(0,0,0,.16)';
+      }, 900);
+    }
+
     function focusPlaceLeaflet(id){
       const m = markerById.get(id);
       if(m){
-        map.setView(m.getLatLng(), 13, {animate:true});
+        map.setView(m.getLatLng(), Math.max(map.getZoom(), 12), {animate:true});
         m.openPopup();
       }
-      const row = listBox.querySelector(`.row[data-id="${id}"]`);
-      if(row){
-        row.scrollIntoView({behavior:'smooth', block:'nearest'});
-        row.style.borderColor = 'rgba(53,208,139,.45)';
-        row.style.background = 'rgba(53,208,139,.08)';
-        setTimeout(()=> {
-          row.style.borderColor = 'rgba(165,255,220,.12)';
-          row.style.background = 'rgba(0,0,0,.16)';
-        }, 900);
-      }
+      highlightRow(id);
     }
 
     function renderList(filtered){
@@ -522,7 +968,7 @@
           </div>
           <div class="muted" style="margin-top:8px; font-size:13px">${p.note}</div>
         `;
-        row.addEventListener('click', ()=> {
+        row.addEventListener('click', () => {
           if(map) focusPlaceLeaflet(p.id);
           else focusPlaceFallback(p.id);
         });
@@ -537,7 +983,6 @@
     function renderLeaflet(){
       const filtered = getFiltered();
       renderList(filtered);
-
       clearLeafletMarkers();
 
       filtered.forEach(p => {
@@ -557,6 +1002,8 @@
             </div>
           `);
 
+        m.on('click', () => highlightRow(p.id));
+
         markers.push(m);
         markerById.set(p.id, m);
       });
@@ -567,13 +1014,12 @@
       }else{
         map.setView([23.75, 121.0], 7);
       }
-
-      logDebug(`Leaflet render OK. places=${filtered.length}`);
     }
 
-    // ===== Fallback（假 pin 地圖：如果 Leaflet CDN 被擋）=====
+    // =========================
+    // ✅ Fallback（假 pin 地圖）
+    // =========================
     function toFallbackXY(lat, lng){
-      // 台灣粗略座標轉 %（只是 demo 用）
       const minLat=21.8, maxLat=25.4;
       const minLng=120.0, maxLng=122.2;
       const x = ((lng - minLng) / (maxLng - minLng)) * 100;
@@ -586,23 +1032,13 @@
     }
 
     function focusPlaceFallback(id){
-      const row = listBox.querySelector(`.row[data-id="${id}"]`);
-      if(row){
-        row.scrollIntoView({behavior:'smooth', block:'nearest'});
-        row.style.borderColor = 'rgba(53,208,139,.45)';
-        row.style.background = 'rgba(53,208,139,.08)';
-        setTimeout(()=> {
-          row.style.borderColor = 'rgba(165,255,220,.12)';
-          row.style.background = 'rgba(0,0,0,.16)';
-        }, 900);
-      }
+      highlightRow(id);
     }
 
     function renderFallback(){
       const filtered = getFiltered();
       renderList(filtered);
 
-      // show grid
       mapGrid.style.display = 'block';
       clearPins();
 
@@ -614,18 +1050,15 @@
         pin.style.top  = y + '%';
         pin.title = `${p.name}｜${p.area}｜指數 ${p.score}`;
         pin.innerHTML = `<span>${p.name}</span>`;
-        pin.addEventListener('click', ()=> focusPlaceFallback(p.id));
+        pin.addEventListener('click', () => focusPlaceFallback(p.id));
         mapBox.appendChild(pin);
       });
-
-      logDebug(`Fallback render OK. places=${filtered.length}`);
     }
 
-    // ===== 初始化（自動判斷 Leaflet 可不可用）=====
-    function init(){
-      debugEl.textContent = "";
-      logDebug("Init start...");
-
+    // =========================
+    // ✅ MAP init
+    // =========================
+    function initMap(){
       const leafletOK = (typeof window.L !== 'undefined');
       if(leafletOK){
         try{
@@ -633,11 +1066,8 @@
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
           }).addTo(map);
-
-          // 初次 render
           renderLeaflet();
 
-          // 事件
           [searchInput, typeFilter, scoreFilter].forEach(el => el.addEventListener('input', renderLeaflet));
           resetMap.addEventListener('click', () => {
             searchInput.value = '';
@@ -646,15 +1076,15 @@
             renderLeaflet();
           });
 
-          logDebug("Leaflet init OK.");
+          // 修正：GitHub Pages 有時候 hash 直接跳 #map，地圖在初始時還沒計算尺寸
+          setTimeout(() => { map.invalidateSize(); }, 120);
+          window.addEventListener('resize', () => map.invalidateSize());
           return;
-        }catch(err){
-          logDebug("Leaflet init FAIL, fallback.");
-          logDebug(String(err));
+        }catch(e){
+          debug("Leaflet init fail => fallback");
+          debug(String(e));
           map = null;
         }
-      }else{
-        logDebug("Leaflet not found, fallback.");
       }
 
       // fallback
@@ -668,7 +1098,171 @@
       });
     }
 
-    // DOM ready
+    // =========================
+    // ✅ QUIZ
+    // =========================
+    const calcBtn = document.getElementById('calcBtn');
+    const modal = document.getElementById('modal');
+    const closeModal = document.getElementById('closeModal');
+    const badge = document.getElementById('badge');
+    const resultMeta = document.getElementById('resultMeta');
+    const resultTitle = document.getElementById('resultTitle');
+    const resultText = document.getElementById('resultText');
+    const taiyuLine = document.getElementById('taiyuLine');
+    const taiyuRoman = document.getElementById('taiyuRoman');
+    const shareText = document.getElementById('shareText');
+    const copyBtn = document.getElementById('copyBtn');
+
+    function getVal(name){
+      const el = document.querySelector(`input[name="${name}"]:checked`);
+      return el ? el.value : null;
+    }
+
+    const types = {
+      spark: {
+        tag: "火種型台灣人",
+        title: "你是「火種型台灣人」：先把一句台語點起來",
+        text: "你最適合做的是把台語變成日常的小儀式。你每一次開口，都在把文化從沉默裡拉回來。",
+        mission: "本週任務：每天一句台語＋分享一張台語圖卡",
+        line:  { hanzi:"我欲講台語，逐工一擺。", roman:"Guá beh kóng Tâi-gí, ta̍k-kang tsi̍t pái." }
+      },
+      guide: {
+        tag: "帶新型台灣人",
+        title: "你是「帶新型台灣人」：讓傳播成為同行",
+        text: "你最強的價值是帶人進來。你不是教別人而已，你是在建立一條可走的路：陪練、打卡、一起完成任務。",
+        mission: "本週任務：找1位朋友一起打卡3天",
+        line:  { hanzi:"我欲揣人做伙，鬥相共。", roman:"Guá beh tshuē lâng tsò-hué, tàu-sann-kāng." }
+      },
+      builder: {
+        tag: "場域型台灣人",
+        title: "你是「場域型台灣人」：點亮一個地方，台語就回得來",
+        text: "你最適合做的是把台語帶回生活空間：店家、教會、社區點。場域一亮，使用量就會長，傳播才會有根。",
+        mission: "本週任務：推薦1個友善場域（店家/教會/市場）",
+        line:  { hanzi:"我欲予台語有所在好講。", roman:"Guá beh hōo Tâi-gí ū sóo-tsāi hó kóng." }
+      }
+    };
+
+    function buildShareCopy(t){
+      return `我剛做了「我是哪一種會傳播台語的台灣人」測驗，我是【${t.tag}】。\n` +
+             `我的台語宣言：${t.line.hanzi}\n` +
+             `本週我要做的台語傳播任務是：${t.mission}\n\n` +
+             `如果你也覺得台語應該回到日常，來一起加入👇\n` +
+             `加入社團：${CONFIG.JOIN_FORM_URL}\n` +
+             `推薦友善環境：${CONFIG.PLACE_FORM_URL}\n\n` +
+             `一句話：講咱的話、聚咱的人、點光咱的所在——台灣。`;
+    }
+
+    calcBtn.addEventListener('click', () => {
+      const q1 = getVal('q1');
+      const q2 = getVal('q2');
+      const q3 = getVal('q3');
+
+      if(!q1 || !q2 || !q3){
+        alert('請先把 3 題都選完（大概 30 秒）。');
+        return;
+      }
+
+      const t = types[q1];
+
+      let mission = t.mission;
+      if(q3 === 'share') mission = "分享一張台語圖卡到 LINE 群組";
+      if(q3 === 'buddy') mission = "找1位朋友一起打卡3天";
+      if(q3 === 'place') mission = "推薦1個友善場域（店家/教會/市場）";
+
+      badge.textContent = `台灣人類型｜${t.tag}`;
+      resultMeta.textContent = `建議任務：${mission}`;
+      resultTitle.textContent = t.title;
+      resultText.textContent = t.text;
+
+      taiyuLine.textContent = t.line.hanzi;
+      taiyuRoman.textContent = t.line.roman;
+
+      shareText.value = buildShareCopy({ ...t, mission });
+      modal.classList.add('show');
+    });
+
+    closeModal.addEventListener('click', () => modal.classList.remove('show'));
+    modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.remove('show'); });
+
+    copyBtn.addEventListener('click', async () => {
+      try{
+        await navigator.clipboard.writeText(shareText.value);
+        copyBtn.textContent = '已複製 ✅';
+        setTimeout(() => copyBtn.textContent = '一鍵複製', 1200);
+      }catch(err){
+        shareText.select();
+        document.execCommand('copy');
+        copyBtn.textContent = '已複製 ✅';
+        setTimeout(() => copyBtn.textContent = '一鍵複製', 1200);
+      }
+    });
+
+    // =========================
+    // ✅ Mission bar collapse
+    // =========================
+    const missionBar = document.getElementById('missionBar');
+    const toggleBar = document.getElementById('toggleBar');
+    toggleBar.addEventListener('click', () => {
+      missionBar.classList.toggle('collapsed');
+      toggleBar.textContent = missionBar.classList.contains('collapsed') ? '展開' : '收合';
+    });
+
+    // =========================
+    // ✅ Tasks demo (front-end)
+    // =========================
+    const taskBox = document.getElementById('taskBox');
+    const progText = document.getElementById('progText');
+    const progBar = document.getElementById('progBar');
+    const resetTasks = document.getElementById('resetTasks');
+
+    function getDoneCount(){
+      return taskBox.querySelectorAll('.cb.done').length;
+    }
+
+    function updateProgress(){
+      const done = getDoneCount();
+      progText.textContent = `${done}/3`;
+      progBar.style.width = `${(done/3)*100}%`;
+      const hint = document.getElementById('progHint');
+      if(done === 0) hint.textContent = '先隨便打勾也可以（Demo）';
+      if(done === 1) hint.textContent = '很好，傳播開始了。';
+      if(done === 2) hint.textContent = '快完成了，再推一下就會擴散。';
+      if(done === 3) hint.textContent = '完成 ✅ 你是本週台語傳播者！';
+    }
+
+    function toggleCb(cb){
+      cb.classList.toggle('done');
+      cb.setAttribute('aria-checked', cb.classList.contains('done') ? 'true' : 'false');
+      updateProgress();
+    }
+
+    taskBox.querySelectorAll('.cb').forEach(cb => {
+      cb.addEventListener('click', () => toggleCb(cb));
+      cb.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          toggleCb(cb);
+        }
+      });
+    });
+
+    resetTasks.addEventListener('click', () => {
+      taskBox.querySelectorAll('.cb').forEach(cb => {
+        cb.classList.remove('done');
+        cb.setAttribute('aria-checked','false');
+      });
+      updateProgress();
+    });
+
+    updateProgress();
+
+    // =========================
+    // ✅ init
+    // =========================
+    function init(){
+      initMap();
+    }
+
     if(document.readyState === 'loading'){
       document.addEventListener('DOMContentLoaded', init);
     }else{
