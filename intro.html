@@ -10,6 +10,9 @@
   <meta property="og:type" content="website" />
   <meta name="theme-color" content="#071a16" />
 
+  <!-- ✅ Leaflet CSS（真地圖） -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
   <style>
     :root{
       --bg:#071a16;
@@ -144,8 +147,6 @@
       background: linear-gradient(180deg, rgba(255,224,92,.98), rgba(248,211,75,.86));
       border-color: rgba(255,224,92,.65);
     }
-
-    /* ✅ 回到台語社團按鈕 */
     .btn.back{
       border-color: rgba(31,183,164,.45);
       background: linear-gradient(180deg, rgba(31,183,164,.14), rgba(0,0,0,.12));
@@ -287,52 +288,49 @@
 
     .mapShell{display:grid; gap:14px;}
     @media(min-width:860px){ .mapShell{grid-template-columns: 1.1fr .9fr;} }
+
+    /* ✅ 真地圖容器（Leaflet） */
     .map{
       border:1px solid rgba(165,255,220,.14);
       border-radius:18px;
-      background:
-        radial-gradient(920px 440px at 18% 18%, rgba(53,208,139,.10), transparent 60%),
-        radial-gradient(760px 380px at 82% 26%, rgba(31,183,164,.08), transparent 60%),
-        rgba(0,0,0,.14);
-      height:380px;
-      position:relative;
       overflow:hidden;
+      height:420px;
+      position:relative;
       box-shadow:var(--shadow2);
+      background: rgba(0,0,0,.14);
     }
-    .mapGrid{
-      position:absolute; inset:0;
-      background-image:
-        linear-gradient(to right, rgba(165,255,220,.08) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(165,255,220,.08) 1px, transparent 1px);
-      background-size: 42px 42px;
-      opacity:.30;
-      pointer-events:none;
+
+    /* ✅ 讓 Leaflet 控制元件更貼合你的暗色系 */
+    .leaflet-container{
+      background:#071a16;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", Arial, sans-serif;
     }
-    .pin{
-      position:absolute;
-      transform: translate(-50%, -100%);
-      cursor:pointer;
-      padding:6px 8px;
-      border-radius:999px;
+    .leaflet-control-zoom a{
+      background: rgba(0,0,0,.55);
+      color: rgba(255,255,255,.92);
       border:1px solid rgba(165,255,220,.18);
-      background:rgba(0,0,0,.28);
+      box-shadow: 0 10px 22px rgba(0,0,0,.35);
       backdrop-filter: blur(10px);
-      font-size:12px;
-      font-weight:900;
-      display:flex; align-items:center; gap:6px;
-      box-shadow: 0 12px 26px rgba(0,0,0,.38);
-      user-select:none;
     }
-    .pin::before{
-      content:"";
-      width:10px; height:10px; border-radius:50%;
-      background: radial-gradient(circle at 30% 30%, #fff, var(--accent));
-      box-shadow: 0 0 14px rgba(53,208,139,.45);
-      display:inline-block;
+    .leaflet-control-zoom a:hover{ background: rgba(255,255,255,.10); }
+    .leaflet-popup-content-wrapper{
+      background: rgba(0,0,0,.78);
+      color: rgba(255,255,255,.92);
+      border:1px solid rgba(165,255,220,.18);
+      border-radius:14px;
+      box-shadow: 0 18px 50px rgba(0,0,0,.55);
+      backdrop-filter: blur(10px);
     }
-    .pin.low::before{
-      background: radial-gradient(circle at 30% 30%, #fff, var(--warn));
-      box-shadow: 0 0 14px rgba(248,211,75,.35);
+    .leaflet-popup-tip{
+      background: rgba(0,0,0,.78);
+      border:1px solid rgba(165,255,220,.18);
+    }
+    .leaflet-control-attribution{
+      background: rgba(0,0,0,.35);
+      color: rgba(255,255,255,.7);
+      border-radius:10px;
+      padding:4px 8px;
+      border:1px solid rgba(165,255,220,.14);
     }
 
     .filters{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
@@ -490,7 +488,6 @@
         <a href="#map">友善環境地圖</a>
         <a href="#join">加入行動</a>
 
-        <!-- ✅ 回到台語社團：統一改 index.html -->
         <a class="btn mini back" href="index.html">← 回到台語社團</a>
       </div>
     </div>
@@ -601,7 +598,7 @@
 
       <div class="card">
         <div class="filters">
-          <input id="search" type="search" placeholder="搜尋：店名 / 地區 / 類型（假資料）" />
+          <input id="search" type="search" placeholder="搜尋：店名 / 地區 / 類型（Demo）" />
           <select id="typeFilter">
             <option value="all">全部類型</option>
             <option value="cafe">咖啡</option>
@@ -620,14 +617,13 @@
         <div class="hr"></div>
 
         <div class="mapShell">
-          <div class="map" id="mapBox">
-            <div class="mapGrid"></div>
-          </div>
+          <!-- ✅ 真地圖容器 -->
+          <div class="map" id="mapBox"></div>
 
           <div class="placeList" id="placeList"></div>
         </div>
 
-        <div class="hint">※ 這是展示用假資料：用來營造「系統正在運作」的感覺。之後可接真實資料庫與地圖 API。</div>
+        <div class="hint">※ 這是展示用假資料：已引入真地圖（Leaflet + OSM）。之後可接真實資料庫與地圖 API。</div>
       </div>
     </section>
 
@@ -713,7 +709,6 @@
         <p class="muted">「咱用咱的母語、來疼祖先放乎咱的土地—台灣——做一個會傳播台語的台灣人。」</p>
         <div class="quizActions" style="margin-top:10px">
           <a class="btn warn" href="LINE_URL" target="_blank" rel="noopener">點我分享到 LINE</a>
-          <!-- ✅ 修正：原本 index.html.html 改成 index.html -->
           <a class="btn back" href="index.html">回到台語社團</a>
         </div>
       </div>
@@ -778,16 +773,20 @@
     </div>
   </div>
 
+  <!-- ✅ Leaflet JS（真地圖） -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
   <script>
-    // ===== 假資料：友善環境 =====
+    // ===== Demo 資料：友善環境（✅ 用真經緯度）=====
     const demoPlaces = [
-      { id:1, name:"阿霞咖啡", type:"cafe",   area:"台中", x:22, y:70, score:92, note:"店員願意用台語點餐，牆上有台語小卡" },
-      { id:2, name:"東門市場口", type:"market", area:"台中", x:48, y:80, score:78, note:"可用台語買菜，攤商親切" },
-      { id:3, name:"光鹽教會", type:"church", area:"彰化", x:68, y:62, score:88, note:"禮拜/團契可使用台語" },
-      { id:4, name:"田野書店", type:"book",  area:"台南", x:78, y:86, score:83, note:"有台語選書與活動" },
-      { id:5, name:"海風咖啡", type:"cafe",   area:"高雄", x:58, y:48, score:90, note:"固定台語日，鼓勵開口" },
-      { id:6, name:"北港老街點", type:"market", area:"雲林", x:38, y:52, score:72, note:"可成長：需要更多台語提示牌" },
+      { id:1, name:"阿霞咖啡", type:"cafe",   area:"台中", lat:24.1477, lng:120.6736, score:92, note:"店員願意用台語點餐，牆上有台語小卡" },
+      { id:2, name:"東門市場口", type:"market", area:"台中", lat:24.1380, lng:120.6853, score:78, note:"可用台語買菜，攤商親切" },
+      { id:3, name:"光鹽教會", type:"church", area:"彰化", lat:24.0518, lng:120.5161, score:88, note:"禮拜/團契可使用台語" },
+      { id:4, name:"田野書店", type:"book",  area:"台南", lat:22.9997, lng:120.2270, score:83, note:"有台語選書與活動" },
+      { id:5, name:"海風咖啡", type:"cafe",   area:"高雄", lat:22.6273, lng:120.3014, score:90, note:"固定台語日，鼓勵開口" },
+      { id:6, name:"北港老街點", type:"market", area:"雲林", lat:23.5685, lng:120.3044, score:72, note:"可成長：需要更多台語提示牌" },
     ];
+
     const typeNames = { cafe:"咖啡", market:"市場", church:"教會", book:"書店" };
 
     const mapBox = document.getElementById('mapBox');
@@ -802,8 +801,43 @@
       return {cls:'mid', label:'可成長'};
     }
 
+    // ===== ✅ 初始化 Leaflet 地圖（台灣中心）=====
+    const map = L.map('mapBox', { zoomControl:true }).setView([23.75, 121.0], 7);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // ✅ 自訂簡單顏色 marker（綠 / 黃）
+    function markerIcon(score){
+      const color = score >= 85 ? 'rgba(53,208,139,.95)' : 'rgba(248,211,75,.95)';
+      const ring  = score >= 85 ? 'rgba(53,208,139,.35)' : 'rgba(248,211,75,.30)';
+      return L.divIcon({
+        className: '',
+        html: `
+          <div style="
+            width:16px;height:16px;border-radius:50%;
+            background:${color};
+            box-shadow:0 0 0 6px ${ring}, 0 14px 26px rgba(0,0,0,.45);
+            border:2px solid rgba(255,255,255,.85);
+          "></div>
+        `,
+        iconSize: [16,16],
+        iconAnchor: [8,8]
+      });
+    }
+
+    let markers = [];
+    const markerById = new Map();
+
+    function clearMarkers(){
+      markers.forEach(m => map.removeLayer(m));
+      markers = [];
+      markerById.clear();
+    }
+
     function renderPlaces(){
-      mapBox.querySelectorAll('.pin').forEach(p => p.remove());
+      clearMarkers();
       listBox.innerHTML = '';
 
       const q = (searchInput.value || '').trim().toLowerCase();
@@ -818,16 +852,26 @@
       });
 
       filtered.forEach(p => {
-        const pin = document.createElement('div');
-        pin.className = 'pin' + (p.score >= 85 ? '' : ' low');
-        pin.style.left = p.x + '%';
-        pin.style.top  = p.y + '%';
-        pin.title = `${p.name}｜${p.area}｜指數 ${p.score}`;
-        pin.innerHTML = `<span>${p.name}</span>`;
-        pin.addEventListener('click', () => highlightPlace(p.id));
-        mapBox.appendChild(pin);
-
         const sc = scoreClass(p.score);
+
+        const m = L.marker([p.lat, p.lng], { icon: markerIcon(p.score) })
+          .addTo(map)
+          .bindPopup(`
+            <div style="min-width:220px">
+              <div style="font-weight:900; font-size:14px">${p.name}</div>
+              <div style="opacity:.82; margin-top:4px">${p.area}｜${typeNames[p.type]}</div>
+              <div style="margin-top:6px">
+                <span style="display:inline-block; padding:4px 8px; border-radius:999px; border:1px solid rgba(165,255,220,.18); background:rgba(255,255,255,.06);">
+                  指數：<b>${p.score}</b>（${sc.label}）
+                </span>
+              </div>
+              <div style="opacity:.84; margin-top:8px">${p.note}</div>
+            </div>
+          `);
+
+        markers.push(m);
+        markerById.set(p.id, m);
+
         const row = document.createElement('div');
         row.className = 'row';
         row.dataset.id = p.id;
@@ -837,7 +881,7 @@
               <div style="font-weight:900">${p.name}</div>
               <div class="muted" style="font-size:13px">${p.area}｜${typeNames[p.type]}</div>
             </div>
-            <div class="score ${sc.cls}"> ${p.score} </div>
+            <div class="score ${sc.cls}">${p.score}</div>
           </div>
           <div class="meta">
             <span class="chip">${sc.label}</span>
@@ -846,25 +890,37 @@
           </div>
           <div class="muted" style="margin-top:8px; font-size:13px">${p.note}</div>
         `;
-        row.addEventListener('click', () => highlightPlace(p.id));
+
+        row.addEventListener('click', () => focusPlace(p.id));
         listBox.appendChild(row);
       });
 
       if(filtered.length === 0){
-        listBox.innerHTML = `<div class="muted" style="padding:12px">沒有符合條件的點位（假資料）。可調整篩選或搜尋字。</div>`;
+        listBox.innerHTML = `<div class="muted" style="padding:12px">沒有符合條件的點位（Demo）。可調整篩選或搜尋字。</div>`;
+        return;
       }
+
+      // ✅ 自動縮放到篩選後點位範圍
+      const bounds = L.latLngBounds(filtered.map(p => [p.lat, p.lng]));
+      map.fitBounds(bounds, { padding:[28,28] });
     }
 
-    function highlightPlace(id){
-      const row = listBox.querySelector(`.row[data-id="${id}"]`);
-      if(!row) return;
-      row.scrollIntoView({behavior:'smooth', block:'nearest'});
-      row.style.borderColor = 'rgba(53,208,139,.45)';
-      row.style.background = 'rgba(53,208,139,.08)';
-      setTimeout(() => {
-        row.style.borderColor = 'rgba(165,255,220,.12)';
-        row.style.background = 'rgba(0,0,0,.16)';
-      }, 900);
+    function focusPlace(id){
+      const row = listBox.querySelector(\`.row[data-id="\${id}"]\`);
+      if(row){
+        row.scrollIntoView({behavior:'smooth', block:'nearest'});
+        row.style.borderColor = 'rgba(53,208,139,.45)';
+        row.style.background = 'rgba(53,208,139,.08)';
+        setTimeout(() => {
+          row.style.borderColor = 'rgba(165,255,220,.12)';
+          row.style.background = 'rgba(0,0,0,.16)';
+        }, 900);
+      }
+      const m = markerById.get(id);
+      if(m){
+        map.setView(m.getLatLng(), 13, { animate:true });
+        m.openPopup();
+      }
     }
 
     [searchInput, typeFilter, scoreFilter].forEach(el => el.addEventListener('input', renderPlaces));
@@ -874,6 +930,7 @@
       scoreFilter.value = 'all';
       renderPlaces();
     });
+
     renderPlaces();
 
     // ===== 測驗 =====
@@ -890,7 +947,7 @@
     const copyBtn = document.getElementById('copyBtn');
 
     function getVal(name){
-      const el = document.querySelector(`input[name="${name}"]:checked`);
+      const el = document.querySelector(\`input[name="\${name}"]:checked\`);
       return el ? el.value : null;
     }
 
@@ -930,7 +987,7 @@
 
     calcBtn.addEventListener('click', () => {
       const q1 = getVal('q1');
-      const q2 = getVal('q2');
+      const q2 = getVal('q2'); // 保留以後擴充分類權重
       const q3 = getVal('q3');
 
       if(!q1 || !q2 || !q3){
