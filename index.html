@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>台語社團再生循環｜文明從城邦開始</title>
+  <meta name="description" content="以城邦生成邏輯重建台語文明：台語（文化）×社團（互助）×友善環境（公共場域），形成可治理、可擴張的再生循環。" />
+  <meta property="og:title" content="台語社團再生循環｜文明從城邦開始" />
+  <meta property="og:description" content="不是推廣活動，是文明再生引擎：台語×社團×友善環境，形成自我演算增殖的文化循環系統。" />
+  <meta property="og:type" content="website" />
+  <!-- 改成綠色系 -->
+  <meta name="theme-color" content="#071a16" />
+
+  <style>
+    :root{
+      /* ===== 綠色系（與 intro.html 同調：深綠 + 綠光 + 薄金）===== */
+      --bg:#071a16;
+      --bg2:#061412;
+
+      --panel:rgba(255,255,255,.05);
+      --panel2:rgba(255,255,255,.08);
+
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.72);
+
+      --line:rgba(165,255,220,.14);
+      --lineStrong:rgba(165,255,220,.18);
+
+      --accent:#35d08b;     /* 主綠 */
+      --accent2:#1fb7a4;    /* 藍綠 */
+      --gold:#f8d34b;       /* 薄金（強 CTA） */
+
+      --good:#6ee7b7;
+      --warn:#f8d34b;
+
+      --radius:18px;
+      --shadow: 0 22px 70px rgba(0,0,0,.55);
+      --shadow2: 0 12px 34px rgba(0,0,0,.42);
+      --max:1100px;
+      font-synthesis-weight:none;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", Arial, sans-serif;
+      background:
+        radial-gradient(1200px 760px at 14% 12%, rgba(53,208,139,.18), transparent 62%),
+        radial-gradient(980px 620px at 88% 22%, rgba(31,183,164,.14), transparent 58%),
+        radial-gradient(860px 560px at 50% 110%, rgba(248,211,75,.08), transparent 62%),
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.18)),
+        var(--bg);
+      color:var(--text);
+      line-height:1.65;
+    }
+    a{color:inherit}
+    .wrap{max-width:var(--max); margin:0 auto; padding:28px 18px 92px;}
+
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px; padding:12px 14px;
+      border:1px solid var(--lineStrong);
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.12));
+      border-radius:999px;
+      box-shadow:var(--shadow2);
+      position:sticky; top:14px; z-index:10;
+      backdrop-filter: blur(12px);
+    }
+    .brand{display:flex; align-items:center; gap:10px; font-weight:900; letter-spacing:.5px;}
+    .dot{
+      width:12px; height:12px; border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, #fff, var(--accent));
+      box-shadow: 0 0 18px rgba(53,208,139,.45);
+    }
+    .nav a{opacity:.9; text-decoration:none}
+    .navlinks{display:flex; gap:14px; flex-wrap:wrap}
+
+    .hero{
+      margin-top:22px;
+      padding:34px 22px;
+      border:1px solid var(--lineStrong);
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.14));
+      border-radius:calc(var(--radius) + 8px);
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .glow{
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(520px 280px at 12% 22%, rgba(53,208,139,.26), transparent 60%),
+        radial-gradient(460px 260px at 86% 26%, rgba(31,183,164,.20), transparent 60%),
+        radial-gradient(700px 380px at 50% 115%, rgba(248,211,75,.10), transparent 65%);
+      filter: blur(10px);
+      opacity:.95;
+      pointer-events:none;
+    }
+    .hero .content{position:relative}
+
+    h1{font-size:36px; line-height:1.15; margin:0 0 12px}
+    .sub{color:var(--muted); font-size:16px; max-width: 72ch;}
+
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:11px 14px;
+      border-radius:999px;
+      border:1px solid var(--lineStrong);
+      background:rgba(255,255,255,.06);
+      text-decoration:none;
+      box-shadow: 0 12px 28px rgba(0,0,0,.35);
+      transition: transform .15s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+      font-weight:900;
+      cursor:pointer;
+      user-select:none;
+    }
+    .btn:hover{
+      transform: translateY(-2px);
+      background:rgba(255,255,255,.10);
+      border-color: rgba(165,255,220,.28);
+      box-shadow: 0 16px 40px rgba(0,0,0,.40);
+    }
+    .btn.primary{
+      border-color: rgba(53,208,139,.55);
+      background: linear-gradient(180deg, rgba(53,208,139,.22), rgba(0,0,0,.12));
+      box-shadow: 0 18px 44px rgba(53,208,139,.14), 0 12px 28px rgba(0,0,0,.38);
+    }
+    .btn.good{
+      border-color: rgba(110,231,183,.55);
+      background: linear-gradient(180deg, rgba(110,231,183,.18), rgba(0,0,0,.12));
+    }
+    .btn.warn{
+      border-color: rgba(248,211,75,.55);
+      color: rgba(0,0,0,.88);
+      background: linear-gradient(180deg, rgba(248,211,75,.98), rgba(248,211,75,.82));
+      box-shadow: 0 20px 46px rgba(248,211,75,.18), 0 12px 28px rgba(0,0,0,.34);
+    }
+    .btn.warn:hover{
+      background: linear-gradient(180deg, rgba(255,224,92,.98), rgba(248,211,75,.86));
+      border-color: rgba(255,224,92,.65);
+    }
+
+    /* 新增：外連 intro.html 的按鍵（導到「台語傳播」頁） */
+    .btn.link{
+      border-color: rgba(31,183,164,.45);
+      background: linear-gradient(180deg, rgba(31,183,164,.16), rgba(0,0,0,.12));
+    }
+
+    .grid{display:grid; gap:14px}
+    @media(min-width:860px){ .grid.cols3{grid-template-columns:repeat(3,1fr)} }
+    @media(min-width:860px){ .grid.cols2{grid-template-columns:repeat(2,1fr)} }
+
+    section{margin-top:26px}
+    .card{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.14));
+      border-radius:var(--radius);
+      padding:18px 16px;
+      box-shadow:var(--shadow2);
+      backdrop-filter: blur(12px);
+    }
+    .kicker{
+      font-size:12px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.64);
+      margin-bottom:10px;
+    }
+    h2{font-size:22px; margin:4px 0 10px}
+    h3{font-size:16px; margin:0 0 8px}
+    ul{margin:10px 0 0 18px; color:var(--muted)}
+
+    .pill{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--lineStrong);
+      background:rgba(0,0,0,.16);
+      color:rgba(255,255,255,.88);
+      font-size:12px;
+      margin-right:8px;
+      margin-top:6px;
+    }
+    .hr{height:1px; background:var(--line); margin:18px 0}
+
+    .loop{
+      font-weight:900;
+      font-size:18px;
+      line-height:1.35;
+      background: linear-gradient(90deg, rgba(167,243,208,.95), rgba(53,208,139,.98), rgba(248,211,75,.88));
+      -webkit-background-clip:text; background-clip:text;
+      color:transparent;
+    }
+
+    .timeline{display:grid; gap:12px}
+    .step{display:flex; gap:12px; align-items:flex-start}
+    .num{
+      width:34px; height:34px; border-radius:10px;
+      display:flex; align-items:center; justify-content:center;
+      font-weight:900;
+      background:rgba(0,0,0,.18);
+      border:1px solid var(--lineStrong);
+      box-shadow: 0 10px 20px rgba(0,0,0,.28);
+      flex:0 0 auto;
+    }
+    .muted{color:var(--muted)}
+
+    .footer{
+      margin-top:34px;
+      padding:18px 16px;
+      border:1px solid var(--lineStrong);
+      border-radius:var(--radius);
+      background:rgba(0,0,0,.18);
+      color:var(--muted);
+      display:flex; flex-wrap:wrap; gap:10px; justify-content:space-between; align-items:center;
+    }
+    .small{font-size:12px}
+
+    /* 小提醒：intro.html 入口卡（更像導覽） */
+    .introCall{
+      margin-top:14px;
+      border:1px dashed rgba(165,255,220,.22);
+      background: rgba(0,0,0,.18);
+      border-radius:16px;
+      padding:14px;
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .introCall b{color:rgba(255,255,255,.92)}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <div class="nav">
+      <div class="brand"><span class="dot"></span> 台語社團再生循環</div>
+      <div class="navlinks">
+        <a href="#pillars">三支柱</a>
+        <a href="#loop">再生循環</a>
+        <a href="#plan">12個月計畫</a>
+        <a href="#join">加入行動</a>
+        <!-- 新增：直接去台語傳播 intro.html -->
+        <a href="intro.html">台語傳播</a>
+      </div>
+    </div>
+
+    <header class="hero" id="top">
+      <div class="glow"></div>
+      <div class="content">
+        <h1>文明從城邦開始，語言是城邦的根</h1>
+        <p class="sub">
+          六千年前，人類從部落走向城邦，靠的不是一份法典，而是三種力量：
+          <b>共同的信仰（文化）</b>、<b>互助的組織（社團）</b>、<b>穩定的公共場域（交易/交流）</b>。
+          當三者形成循環，文明就會自己生長。<br/>
+          我們用同樣的生成邏輯，打造一套可治理、可擴張、可自我演算增殖的「台語再生循環」。
+        </p>
+
+        <div class="cta">
+          <a class="btn primary" href="#join">加入社團</a>
+          <a class="btn" href="#join">推薦友善環境</a>
+          <a class="btn" href="#plan">看12個月計畫</a>
+          <!-- 新增：去台語傳播頁 intro.html（你要病毒傳播那頁） -->
+          <a class="btn link" href="intro.html">去做「台語傳播測驗」→</a>
+        </div>
+
+        <!-- 新增：更清楚的 intro.html 導流區塊 -->
+        <div class="introCall">
+          <div>
+            <b>想快速引爆擴散？</b>
+            <span class="muted">去「台語傳播」頁：2 分鐘測驗 → 結果卡 → 任務 → 友善地圖（Demo）。</span>
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <a class="btn good" href="intro.html">前往台語傳播頁</a>
+            <a class="btn warn" href="intro.html#quiz">直接做測驗</a>
+            <a class="btn" href="intro.html#map">看友善地圖</a>
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <span class="pill">台語＝文化能量</span>
+          <span class="pill">社團＝動員骨架</span>
+          <span class="pill">友善環境＝場域循環</span>
+        </div>
+      </div>
+    </header>
+
+    <section id="pillars">
+      <div class="kicker">Three Pillars</div>
+      <h2>三支柱：城邦三力的台語版本</h2>
+
+      <div class="grid cols3">
+        <div class="card">
+          <h3>① 台語｜文化信仰支柱</h3>
+          <p class="muted">台語不是課堂科目，是身份與記憶。用數位模式把文化「每天生成」。</p>
+          <ul>
+            <li>每日台語：情境句、圖像、音檔、短影音</li>
+            <li>家庭打卡：連續日數、成就徽章、榮譽牆</li>
+            <li>內容再生：用戶貢獻、故事/歌謠/諺語沉澱</li>
+          </ul>
+          <div class="hr"></div>
+          <!-- 新增導流 -->
+          <a class="btn link" href="intro.html#quiz">去做「我是什麼傳播者？」測驗</a>
+        </div>
+
+        <div class="card">
+          <h3>② 社團｜互助耕作支柱</h3>
+          <p class="muted">文化要延續，需要組織。社團把熱情變成「可治理的動員」。</p>
+          <ul>
+            <li>社團任務：每週主題、挑戰、共同目標</li>
+            <li>輔導員制度：資深帶新、師徒循環</li>
+            <li>治理儀表板：活躍度、達標率、排行與回饋</li>
+          </ul>
+          <div class="hr"></div>
+          <!-- 新增導流 -->
+          <a class="btn" href="intro.html#join">去看「本週台語傳播任務」</a>
+        </div>
+
+        <div class="card">
+          <h3>③ 友善環境｜公共場域支柱</h3>
+          <p class="muted">語言要活，必須「被使用」。友善環境是台語回到生活的廣場與市集。</p>
+          <ul>
+            <li>友善標章：申請、認領、分級</li>
+            <li>推薦機制：會員/非會員權重、投票與見證</li>
+            <li>曝光導流：榜單、地圖、活動串聯</li>
+          </ul>
+          <div class="hr"></div>
+          <!-- 新增導流 -->
+          <a class="btn good" href="intro.html#map">去看「友善環境地圖（Demo）」</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="loop">
+      <div class="kicker">Regeneration Loop</div>
+      <h2>再生循環：不是活動，而是文明引擎</h2>
+
+      <div class="card">
+        <div class="loop">文化（台語） → 動員（社團） → 使用（場域） → 回饋（內容/榮譽/流量） → 文化增強</div>
+        <div class="hr"></div>
+        <div class="grid cols2">
+          <div>
+            <h3>循環如何啟動？</h3>
+            <ul>
+              <li>用「每日生成」讓文化每天可被參與</li>
+              <li>用「社團任務」把參與變成共同旅程</li>
+              <li>用「友善場域」讓台語回到生活交換</li>
+            </ul>
+          </div>
+          <div>
+            <h3>循環如何變強？</h3>
+            <ul>
+              <li>用「榜單與勳章」把付出變成榮譽身份</li>
+              <li>用「儀表板」把治理變成看得見的成長</li>
+              <li>用「回饋機制」讓內容與場域持續擴張</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+        <!-- 新增：直接導到 intro.html 的病毒傳播入口 -->
+        <div class="introCall">
+          <div>
+            <b>最短路徑啟動循環：</b>
+            <span class="muted">先去台語傳播頁做測驗，拿結果卡貼到 LINE 群組，就會開始自動擴散。</span>
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <a class="btn warn" href="intro.html#quiz">立刻做 2 分鐘測驗</a>
+            <a class="btn link" href="intro.html">打開台語傳播頁</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="plan">
+      <div class="kicker">12-Month Plan</div>
+      <h2>12 個月落地路線</h2>
+
+      <div class="card timeline">
+        <div class="step">
+          <div class="num">1</div>
+          <div>
+            <h3>0–3 月｜播種期</h3>
+            <div class="muted">核心團隊＋輔導員訓練；10 個友善環境試點；50 位核心參與者。</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <div>
+            <h3>4–8 月｜擴散期</h3>
+            <div class="muted">社團任務與排行榜；每月主題活動；標章與推薦機制上線。</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <div>
+            <h3>9–12 月｜聯盟期</h3>
+            <div class="muted">跨區社團聯盟；治理儀表板公開；100+ 場域節點、30+ 社團節點。</div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+        <div class="grid cols2">
+          <div>
+            <h3>KPI（看得見的進步）</h3>
+            <ul>
+              <li>參與：日活、連續打卡、分享量</li>
+              <li>社團：活動數、帶新成功率、達標率</li>
+              <li>場域：上架數、造訪數、推薦票數</li>
+              <li>內容：音檔/短影音/情境句增長</li>
+            </ul>
+          </div>
+          <div>
+            <h3>資源配置（可調整）</h3>
+            <ul>
+              <li>內容與工具：40%</li>
+              <li>社團與活動：30%</li>
+              <li>傳播與合作：30%</li>
+            </ul>
+            <div class="muted small">※ 預算與來源可依你們實際提案（募資/贊助/合作計畫）替換。</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="join">
+      <div class="kicker">Call to Action</div>
+      <h2>加入循環：成為生成者</h2>
+
+      <div class="grid cols2">
+        <div class="card">
+          <h3>我想加入社團 / 成為志工 / 成為管理者</h3>
+          <p class="muted">選擇你的角色，從「參與」開始，逐步成為治理節點。</p>
+          <!-- 你可改成真表單 -->
+          <a class="btn primary" href="FORM_URL" target="_blank" rel="noopener">填寫加入表單</a>
+          <!-- 新增：去 intro.html 的「立刻加入」區 -->
+          <a class="btn link" href="intro.html#join" style="margin-left:8px">先去台語傳播頁看加入入口</a>
+        </div>
+
+        <div class="card">
+          <h3>我想推薦友善環境 / 申請標章</h3>
+          <p class="muted">讓台語回到生活場域，讓每一次使用都算數。</p>
+          <a class="btn" href="FORM_URL" target="_blank" rel="noopener">推薦 / 申請入口</a>
+          <a class="btn good" href="intro.html#map" style="margin-left:8px">先看 Demo 地圖</a>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>
+          <b>分享出去：</b>
+          <a href="FB_URL" target="_blank" rel="noopener">Facebook</a> ·
+          <a href="X_URL" target="_blank" rel="noopener">X</a> ·
+          <a href="LINE_URL" target="_blank" rel="noopener">LINE</a>
+          <!-- 新增：台語傳播頁分享入口 -->
+          · <a href="intro.html" target="_blank" rel="noopener">台語傳播（intro.html）</a>
+        </div>
+        <div class="small">© 台語社團再生循環｜文明再生引擎</div>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>
