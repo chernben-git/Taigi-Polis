@@ -482,9 +482,156 @@
 
     .center{text-align:center}
 
+    /* ── 桌機版：手風琴 header/body 全部還原成正常 section ── */
+    @media(min-width:761px){
+      .accordion-section{
+        border:none;
+        border-radius:0;
+        background:none;
+        box-shadow:none;
+        margin-top:0;
+        overflow:visible;
+      }
+      .accordion-header{ display:none; }
+      .accordion-body{
+        max-height:none !important;
+        opacity:1 !important;
+        overflow:visible;
+        transition:none;
+      }
+      .accordion-body-inner{
+        padding:0;
+        border-top:none;
+      }
+      #accordionRoot > .accordion-section{ margin-top:0; }
+    }
+
     @media(max-width:760px){
       h1{font-size:31px}
       .sub{font-size:15px}
+    }
+
+    /* ── ACCORDION (手機版手風琴) ── */
+    @media(max-width:760px){
+
+      /* section 變成可點擊的手風琴標頭 */
+      .accordion-section{
+        margin-top:14px;
+        border:1px solid var(--lineStrong);
+        border-radius:20px;
+        overflow:hidden;
+        background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.14));
+        box-shadow:var(--shadow2);
+      }
+
+      .accordion-header{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        padding:16px 18px;
+        cursor:pointer;
+        user-select:none;
+        gap:12px;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .accordion-header:active{
+        background:rgba(255,255,255,.06);
+      }
+
+      .accordion-title-wrap{
+        display:flex;
+        align-items:center;
+        gap:10px;
+      }
+
+      .accordion-emoji{
+        font-size:20px;
+        flex:0 0 auto;
+      }
+
+      .accordion-title{
+        font-size:17px;
+        font-weight:900;
+        letter-spacing:.2px;
+        margin:0;
+      }
+
+      .accordion-sub{
+        font-size:12px;
+        color:rgba(255,255,255,.52);
+        margin-top:2px;
+      }
+
+      /* 旋轉箭頭 */
+      .accordion-arrow{
+        width:28px;
+        height:28px;
+        border-radius:8px;
+        border:1px solid var(--lineStrong);
+        background:rgba(0,0,0,.18);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        flex:0 0 auto;
+        transition: transform .22s cubic-bezier(.34,1.56,.64,1), background .15s ease;
+        font-size:13px;
+        color:rgba(255,255,255,.72);
+      }
+
+      .accordion-section.open .accordion-arrow{
+        transform: rotate(180deg);
+        background:rgba(53,208,139,.18);
+        border-color:rgba(53,208,139,.45);
+        color:var(--accent);
+      }
+
+      /* 內容區，snappy pop：用 cubic-bezier 彈開 */
+      .accordion-body{
+        overflow:hidden;
+        max-height:0;
+        opacity:0;
+        transition:
+          max-height .32s cubic-bezier(.34,1.4,.64,1),
+          opacity .20s ease;
+      }
+
+      .accordion-section.open .accordion-body{
+        max-height:3000px;
+        opacity:1;
+        transition:
+          max-height .38s cubic-bezier(.34,1.3,.64,1),
+          opacity .18s ease .04s;
+      }
+
+      .accordion-body-inner{
+        padding:0 14px 18px;
+        border-top:1px solid var(--line);
+      }
+
+      /* 第一個 section 預設展開提示脈衝 */
+      .accordion-section.default-open .accordion-arrow{
+        animation: pulse-arrow 1.8s ease 0.6s 2;
+      }
+
+      @keyframes pulse-arrow{
+        0%,100%{ box-shadow:none }
+        50%{ box-shadow:0 0 0 4px rgba(53,208,139,.22) }
+      }
+
+      /* 在手風琴內，section 本身的 margin 歸零 */
+      .accordion-body-inner > section,
+      .accordion-body-inner > .kicker,
+      .accordion-body-inner > h2{
+        margin-top:14px;
+      }
+
+      .accordion-body-inner h2{
+        font-size:18px;
+      }
+
+      /* 讓桌機版原本的 section margin 在手機版不重複 */
+      .mobile-accordion > section{ margin-top:0 }
     }
   </style>
 </head>
@@ -589,6 +736,24 @@
       </div>
     </header>
 
+    <!-- ══ 手機版手風琴 / 桌機版正常顯示 ══ -->
+    <div id="accordionRoot">
+
+    <!-- ① 四層生成 -->
+    <div class="accordion-section default-open open" data-section="pillars">
+      <div class="accordion-header" role="button" tabindex="0" aria-expanded="true">
+        <div class="accordion-title-wrap">
+          <span class="accordion-emoji">🏛</span>
+          <div>
+            <div class="accordion-title">四層生成力量</div>
+            <div class="accordion-sub">家庭・家族・社團・友善場域</div>
+          </div>
+        </div>
+        <span class="accordion-arrow">▼</span>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+
     <section id="pillars">
       <div class="kicker">Four Layers of Civilization</div>
       <h2>四層生成力量：台語城邦形成的基礎</h2>
@@ -644,6 +809,25 @@
       </div>
     </section>
 
+        </div><!-- /accordion-body-inner -->
+      </div><!-- /accordion-body -->
+    </div><!-- /accordion-section pillars -->
+
+    <!-- ② 再生循環 -->
+    <div class="accordion-section" data-section="loop">
+      <div class="accordion-header" role="button" tabindex="0" aria-expanded="false">
+        <div class="accordion-title-wrap">
+          <span class="accordion-emoji">🔄</span>
+          <div>
+            <div class="accordion-title">再生循環</div>
+            <div class="accordion-sub">從家庭出發，走向城邦文明</div>
+          </div>
+        </div>
+        <span class="accordion-arrow">▼</span>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+
     <section id="loop">
       <div class="kicker">Regeneration Loop</div>
       <h2>再生循環：從家庭出發，走向城邦文明</h2>
@@ -689,6 +873,25 @@
         </div>
       </div>
     </section>
+
+        </div>
+      </div>
+    </div><!-- /accordion-section loop -->
+
+    <!-- ③ 12個月計畫 -->
+    <div class="accordion-section" data-section="plan">
+      <div class="accordion-header" role="button" tabindex="0" aria-expanded="false">
+        <div class="accordion-title-wrap">
+          <span class="accordion-emoji">📅</span>
+          <div>
+            <div class="accordion-title">12 個月落地計畫</div>
+            <div class="accordion-sub">播種期・擴散期・聯盟期</div>
+          </div>
+        </div>
+        <span class="accordion-arrow">▼</span>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
 
     <section id="plan">
       <div class="kicker">12-Month Plan</div>
@@ -746,6 +949,25 @@
       </div>
     </section>
 
+        </div>
+      </div>
+    </div><!-- /accordion-section plan -->
+
+    <!-- ④ 加入行動 -->
+    <div class="accordion-section" data-section="join">
+      <div class="accordion-header" role="button" tabindex="0" aria-expanded="false">
+        <div class="accordion-title-wrap">
+          <span class="accordion-emoji">🙋</span>
+          <div>
+            <div class="accordion-title">加入傳播行動</div>
+            <div class="accordion-sub">成為台語城邦的生成者</div>
+          </div>
+        </div>
+        <span class="accordion-arrow">▼</span>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+
     <section id="join">
       <div class="kicker">Call to Action</div>
       <h2>加入循環：成為台語城邦的生成者</h2>
@@ -790,11 +1012,18 @@
       </div>
     </section>
 
+        </div>
+      </div>
+    </div><!-- /accordion-section join -->
+
+    </div><!-- /accordionRoot -->
+
   </div>
 
   <script>
-    const nav = document.getElementById('mainNav');
-    const btn = document.getElementById('hamburgerBtn');
+    /* ── NAV 漢堡 ── */
+    const nav    = document.getElementById('mainNav');
+    const btn    = document.getElementById('hamburgerBtn');
     const drawer = document.getElementById('navDrawer');
 
     btn.addEventListener('click', () => {
@@ -803,7 +1032,6 @@
       drawer.setAttribute('aria-hidden', !isOpen);
     });
 
-    // 點擊 drawer 內連結後自動收合
     drawer.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         nav.classList.remove('open');
@@ -812,12 +1040,60 @@
       });
     });
 
-    // 點擊 nav 外部自動收合
     document.addEventListener('click', (e) => {
       if (!nav.contains(e.target)) {
         nav.classList.remove('open');
         btn.setAttribute('aria-expanded', 'false');
         drawer.setAttribute('aria-hidden', 'true');
+      }
+    });
+
+    /* ── 手風琴 (只在手機版啟動) ── */
+    function isMobile(){ return window.innerWidth <= 760; }
+
+    const sections = document.querySelectorAll('.accordion-section');
+
+    sections.forEach(sec => {
+      const header = sec.querySelector('.accordion-header');
+
+      header.addEventListener('click', () => {
+        if (!isMobile()) return; // 桌機完全忽略
+
+        const isOpen = sec.classList.contains('open');
+
+        if (isOpen) {
+          // 收合自己
+          sec.classList.remove('open');
+          header.setAttribute('aria-expanded', 'false');
+        } else {
+          // 展開自己（不強制關閉其他，讓使用者自由控制）
+          sec.classList.add('open');
+          header.setAttribute('aria-expanded', 'true');
+
+          // 微微延遲後滾動到此 section
+          setTimeout(() => {
+            sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 60);
+        }
+      });
+
+      // 鍵盤支援
+      header.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          header.click();
+        }
+      });
+    });
+
+    /* 桌機版：確保所有 open class 不影響顯示 (CSS @media 已處理，JS 這裡做 resize 保護) */
+    window.addEventListener('resize', () => {
+      if (!isMobile()) {
+        // 桌機：body 內容全部顯示，accordion-body max-height 不由 JS 控制
+        // 只需確保 aria 正確
+        sections.forEach(sec => {
+          sec.querySelector('.accordion-header').setAttribute('aria-expanded', 'true');
+        });
       }
     });
   </script>
